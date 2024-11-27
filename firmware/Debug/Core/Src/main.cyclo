@@ -1,0 +1,4 @@
+../Core/Src/main.c:7:5:main	2
+../Core/Src/main.c:19:6:SystemClock_Config	4
+../Core/Src/main.c:54:6:I2C_Init	2
+../Core/Src/main.c:87:6:Error_Handler	1
