@@ -2,17 +2,39 @@
 
 
 void SystemClock_Config(void);
+void DMA_Init(void);
+void I2C_Init(void);
+
 I2C_HandleTypeDef hI2C;
+DMA_HandleTypeDef hdma_i2c1_tx;
+DMA_HandleTypeDef hdma_i2c1_rx;
+
+#define BUFFERSIZE 100
+#define BMP180ADDR 0b11101110
+#define MPU6050ADDR 0b11010010
+
+#define AC1_H 0xAA
+#define AC1_L 0xAB
+
+
+uint8_t Buffer_Dest[BUFFERSIZE];
+uint8_t Buffer_Src[BUFFERSIZE];
+
 
 int main(void)
 {
+  Buffer_Src[0] = 0xAA;
   HAL_Init();
   SystemClock_Config();
   I2C_Init();
+  DMA_Init();
+
+  if(HAL_I2C_Master_Transmit_DMA(&hI2C, BMP180ADDR, (uint8_t*)Buffer_Src, sizeof(Buffer_Src)) != HAL_OK)
+  		  Error_Handler();
+  if(HAL_I2C_Master_Receive_DMA(&hI2C, BMP180ADDR, Buffer_Dest , 1) != HAL_OK)
+  		Error_Handler();
   while (1)
   {
-	  if(HAL_I2C_Master_Transmit(&hI2C, 0b11101110, (uint8_t*) "1234", 4, 10000) != HAL_OK)
-		Error_Handler();
   }
 }
 
@@ -51,35 +73,32 @@ void SystemClock_Config(void)
 
 
 //PB6 = SCL1, PB7 = SDA1
-void I2C_Init(){
-
-	GPIO_InitTypeDef GPIO_InitStruct;
-
-	GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-	GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-	__GPIOB_CLK_ENABLE();
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	__I2C1_CLK_ENABLE();
+void I2C_Init(void){
 	hI2C.Instance = I2C1;
 	hI2C.Init.OwnAddress2 = 0;
 	hI2C.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
 	hI2C.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	hI2C.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
 	hI2C.Init.OwnAddress1 = 0;
+	hI2C.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
 	hI2C.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 	hI2C.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 	hI2C.Init.Timing = 0x00100D14;
-
-	//hI2CInit.Init.ClockSpeed = 100000;
-	//hI2C.Init.DutyCycle = I2C_DUTYCYCLE_2;
 
 	if (HAL_I2C_Init(&hI2C) != HAL_OK)
 	{
 		Error_Handler();
 	}
+}
+
+void DMA_Init(void){
+	__HAL_RCC_DMA1_CLK_ENABLE();
+
+	HAL_NVIC_SetPriority(DMA1_Channel6_IRQn,0,0);
+	HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+
+	HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 }
 
 
