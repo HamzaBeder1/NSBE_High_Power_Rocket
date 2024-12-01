@@ -13,12 +13,19 @@ DMA_HandleTypeDef hdma_i2c1_rx;
 #define BMP180ADDR 0b11101110
 #define MPU6050ADDR 0b11010010
 
+
 #define AC1_H 0xAA
 #define AC1_L 0xAB
 
 
 uint8_t Buffer_Dest[BUFFERSIZE];
 uint8_t Buffer_Src[BUFFERSIZE];
+
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *I2cHandle)
+{
+	if(HAL_I2C_Master_Receive_DMA(&hI2C, MPU6050ADDR, Buffer_Dest , 1) != HAL_OK)
+	  		Error_Handler();
+}
 
 
 int main(void)
@@ -29,12 +36,18 @@ int main(void)
   I2C_Init();
   DMA_Init();
 
-  if(HAL_I2C_Master_Transmit_DMA(&hI2C, BMP180ADDR, (uint8_t*)Buffer_Src, sizeof(Buffer_Src)) != HAL_OK)
-  		  Error_Handler();
-  if(HAL_I2C_Master_Receive_DMA(&hI2C, BMP180ADDR, Buffer_Dest , 1) != HAL_OK)
-  		Error_Handler();
   while (1)
   {
+	  if(HAL_I2C_Master_Transmit_DMA(&hI2C, BMP180ADDR, Buffer_Src, 1) != HAL_OK)
+	    		  Error_Handler();
+	  while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY)
+	  	      {
+	  	      }
+	  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
+	  if(HAL_I2C_Master_Receive_DMA(&hI2C, BMP180ADDR, Buffer_Dest , 1) != HAL_OK)
+	    	  		Error_Handler();
+	  while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
+	  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
   }
 }
 
@@ -89,6 +102,16 @@ void I2C_Init(void){
 	{
 		Error_Handler();
 	}
+
+	if (HAL_I2CEx_ConfigAnalogFilter(&hI2C, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+    if (HAL_I2CEx_ConfigDigitalFilter(&hI2C, 0) != HAL_OK)
+    {
+    	Error_Handler();
+    }
 }
 
 void DMA_Init(void){

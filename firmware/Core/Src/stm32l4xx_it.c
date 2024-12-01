@@ -3,6 +3,7 @@
 
 extern DMA_HandleTypeDef hdma_i2c1_tx;
 extern DMA_HandleTypeDef hdma_i2c1_rx;
+extern I2C_HandleTypeDef hI2C;
 
 void NMI_Handler(void)
 {
@@ -75,6 +76,17 @@ void DMA1_Channel6_IRQHandler(void){
 
 void DMA1_Channel7_IRQHandler(void){
 	HAL_DMA_IRQHandler(&hdma_i2c1_rx);
+}
+
+void I2C1_EV_IRQHandler(void)
+{
+  HAL_I2C_EV_IRQHandler(&hI2C);
+}
+
+
+void I2C1_ER_IRQHandler(void)
+{
+  HAL_I2C_ER_IRQHandler(&hI2C);
 }
 
 /******************************************************************************/
