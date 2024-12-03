@@ -5,7 +5,6 @@ void SystemClock_Config(void);
 void DMA_Init(void);
 void I2C_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_GPIO_Init(void);
 
 //UART_HandleTypeDef huart2;
 
@@ -21,35 +20,33 @@ DMA_HandleTypeDef hdma_i2c1_rx;
 uint8_t Buffer_Dest[BUFFERSIZE];
 uint8_t WHO_AM_I[1] = {0x75};
 
-/*
+
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *I2cHandle)
 {
-	if(HAL_I2C_Master_Receive_DMA(&hI2C, MPU6050ADDR, Buffer_Dest,1) != HAL_OK)
+	/*if(HAL_I2C_Master_Receive_DMA(&hI2C, MPU6050ADDR, Buffer_Dest,1) != HAL_OK)
 		    	  		Error_Handler();
 	while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-    while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
+    while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);*/
 }
 
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef * I2cHandle){
-	if(HAL_I2C_Master_Transmit_DMA(&hI2C, MPU6050ADDR, WHO_AM_I, 1) != HAL_OK)
+	/*if(HAL_I2C_Master_Transmit_DMA(&hI2C, MPU6050ADDR, WHO_AM_I, 1) != HAL_OK)
 		    		  Error_Handler();
 	while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-		  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
+		  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);*/
 }
 
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c){
 
 }
-*/
+
 
 int main(void)
 {
   HAL_Init();
   SystemClock_Config();
-  MX_GPIO_Init();
   DMA_Init();
   I2C_Init();
-  //HAL_UART_Transmit(&huart1, tx_buff, 10, 1000);
   while (1)
   {
 	  if(HAL_I2C_Master_Transmit_DMA(&hI2C, MPU6050ADDR, WHO_AM_I, 1) != HAL_OK)
@@ -108,8 +105,8 @@ void I2C_Init(void){
 	hI2C.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
 	hI2C.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 	hI2C.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-	hI2C.Init.Timing = 0x00100D19;
-
+	//hI2C.Init.Timing = 0x00100D19;
+	hI2C.Init.Timing = 0x00100D14;
 	if (HAL_I2C_Init(&hI2C) != HAL_OK)
 	{
 		Error_Handler();
@@ -152,19 +149,6 @@ static void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }*/
-}
-
-static void MX_GPIO_Init(void)
-{
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
 }
 
 
