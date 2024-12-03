@@ -5,6 +5,7 @@ void SystemClock_Config(void);
 void DMA_Init(void);
 void I2C_Init(void);
 static void MX_USART2_UART_Init(void);
+void Calculate_Temp_And_Pressure(void);
 
 //UART_HandleTypeDef huart2;
 
@@ -16,30 +17,121 @@ DMA_HandleTypeDef hdma_i2c1_rx;
 #define BMP180ADDR 0b11101110
 #define MPU6050ADDR 0b11010010
 
+uint8_t AC1_H = 0xAA;
+uint8_t F6 = 0xF6;
+uint8_t F7 = 0xF7;
+uint8_t F4 = 0xF4;
+uint8_t F8 = 0xF8;
+uint8_t E2 = 0x2E;
+uint8_t x34 = 0x23;
+uint8_t WHO_AM_I;
 
-uint8_t Buffer_Dest[BUFFERSIZE];
-uint8_t WHO_AM_I[1] = {0x75};
+
+enum State{
+	READ_1,
+	READ_2,
+	READ_3,
+	WRITE_1,
+	WRITE_2,
+	READ_2_SETUP,
+	READ_3_SETUP
+};
+
+struct BMP180{
+	uint8_t Buffer1[22];
+	uint8_t  Buffer2[2];
+	uint8_t  Buffer3[3];
+	enum State currState;
+};
 
 
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *I2cHandle)
+
+
+struct BMP180 bmp = {.currState = READ_1};
+
+uint8_t Buffer_BMP180[BUFFERSIZE];
+uint8_t WHO_AM_I_MPU6050 = 0x75;
+
+uint8_t currAddr;
+
+
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *I2CHandle)
 {
-	/*if(HAL_I2C_Master_Receive_DMA(&hI2C, MPU6050ADDR, Buffer_Dest,1) != HAL_OK)
-		    	  		Error_Handler();
-	while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-    while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);*/
+	if(I2CHandle->Instance == I2C1){
+		if(currAddr == BMP180ADDR){
+			switch(bmp.currState){
+			case READ_1:
+				if(HAL_I2C_Master_Receive_DMA(&hI2C, currAddr, bmp.Buffer1 ,sizeof(bmp.Buffer1)) != HAL_OK)
+					Error_Handler();
+				bmp.currState = WRITE_1;
+				break;
+			case WRITE_1:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &E2 ,1) != HAL_OK)
+						Error_Handler();
+					bmp.currState = READ_2_SETUP;
+				break;
+			case READ_2_SETUP:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &F6,1) != HAL_OK)
+						Error_Handler();
+					bmp.currState = READ_2;
+				break;
+			case READ_2:
+				if(HAL_I2C_Master_Receive_DMA(&hI2C, currAddr, bmp.Buffer2 ,sizeof(bmp.Buffer2)) != HAL_OK)
+										Error_Handler();
+				bmp.currState = WRITE_2;
+				break;
+			case WRITE_2:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &x34 ,1) != HAL_OK)
+										Error_Handler();
+									bmp.currState = READ_3_SETUP;
+								break;
+			case READ_3_SETUP:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &F6,1) != HAL_OK)
+										Error_Handler();
+									bmp.currState = READ_3;
+								break;
+			case READ_3:
+				if(HAL_I2C_Master_Receive_DMA(&hI2C, currAddr, bmp.Buffer3,sizeof(bmp.Buffer3)) != HAL_OK)
+														Error_Handler();
+				bmp.currState = READ_1;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }
 
-void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef * I2cHandle){
-	/*if(HAL_I2C_Master_Transmit_DMA(&hI2C, MPU6050ADDR, WHO_AM_I, 1) != HAL_OK)
-		    		  Error_Handler();
-	while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-		  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);*/
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef * I2CHandle){
+	if(I2CHandle->Instance == I2C1){
+		if(currAddr == BMP180ADDR){
+			switch(bmp.currState){
+			case WRITE_1:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &F4, 1) != HAL_OK)
+							Error_Handler();
+				break;
+			case WRITE_2:
+				if(HAL_I2C_Master_Transmit_DMA(&hI2C, currAddr, &F4, 1) != HAL_OK)
+											Error_Handler();
+								break;
+			case READ_1:
+				Calculate_Temp_And_Pressure();
+			default:
+							break;
+			}
+		}
+	}
 }
 
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c){
 
 }
 
+void readRegisters(uint8_t addr, uint8_t * startAddr){
+	currAddr = addr;
+	if(HAL_I2C_Master_Transmit_DMA(&hI2C, addr, startAddr, 1) != HAL_OK)
+				Error_Handler();
+}
 
 int main(void)
 {
@@ -47,16 +139,10 @@ int main(void)
   SystemClock_Config();
   DMA_Init();
   I2C_Init();
+
   while (1)
   {
-	  if(HAL_I2C_Master_Transmit_DMA(&hI2C, MPU6050ADDR, WHO_AM_I, 1) != HAL_OK)
-	    		  Error_Handler();
-	  while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-	  while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
-	  if(HAL_I2C_Master_Receive_DMA(&hI2C, MPU6050ADDR, Buffer_Dest,1) != HAL_OK)
-	  		    	  		Error_Handler();
-	  	while (HAL_I2C_GetState(&hI2C) != HAL_I2C_STATE_READY);
-	    while(HAL_I2C_GetError(&hI2C) == HAL_I2C_ERROR_AF);
+	  readRegisters(BMP180ADDR, &AC1_H);
   }
 }
 
@@ -151,6 +237,7 @@ static void MX_USART2_UART_Init(void)
   }*/
 }
 
+void Calculate_Temp_And_Pressure(void){}
 
 void Error_Handler(void)
 {
