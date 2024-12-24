@@ -38,7 +38,7 @@ void getAccelMPU6050(){
 	    int16_t Y = (accelReg[2] << 8) | (accelReg[3]);
 	    int16_t Z = (accelReg[4] << 8) | (accelReg[5]);
 
-	    accelX = (accelX)*step;
-	    accelY = (accelY)*step;
-	    accelZ = (accelZ)*step;
+	    accelX = (X)*step;
+	    accelY = (Y)*step;
+	    accelZ = (Z)*step;
 }
