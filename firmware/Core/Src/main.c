@@ -45,7 +45,7 @@ int main(void)
   while (1)
   {
 	  //getAccelMPU6050();
-	  get_bmp_t();
+	  get_bmp_p();
 	  int x = 21;
 	  x+=1;
   }

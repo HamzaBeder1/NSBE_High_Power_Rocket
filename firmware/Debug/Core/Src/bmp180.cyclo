@@ -1,4 +1,5 @@
 ../Core/Src/bmp180.c:10:6:get_bmp_calibration_data	1
 ../Core/Src/bmp180.c:14:6:get_bmp_ut	1
-../Core/Src/bmp180.c:24:6:get_bmp_up	1
-../Core/Src/bmp180.c:31:6:get_bmp_t	1
+../Core/Src/bmp180.c:22:6:get_bmp_up	1
+../Core/Src/bmp180.c:29:6:get_bmp_t	1
+../Core/Src/bmp180.c:44:6:get_bmp_p	2
