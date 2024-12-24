@@ -42,8 +42,11 @@ int main(void)
 
   uint8_t result[1];
   initMPU6050(0);
+  uint8_t arr[6] = {30, 14, 4, 3, 24, 12};
   while (1)
   {
+	  initDS3231(2024, arr, 1, 12);
+	    getDateAndTime();
 	  //getAccelMPU6050();
 	  get_bmp_p();
 	  int x = 21;

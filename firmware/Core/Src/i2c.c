@@ -21,6 +21,12 @@ void readRegister(uint8_t addr, uint8_t regAddr, uint8_t *result, uint16_t size)
 	transmitterReady = 0;
 }
 
+void writeRegisters(uint8_t addr, uint8_t regAddr, uint8_t *value, uint16_t size){
+	for(int i = 0; i < size; i++){
+		writeRegister(addr, regAddr+i, value[i]);
+	}
+}
+
 //PB6 = SCL1, PB7 = SDA1
 void I2C_Init(void){
 	hI2C.Instance = I2C1;

@@ -81,7 +81,5 @@ void get_bmp_p(){
 	X1 = (X1*3038L) >> 16;
 	X2 = (-7357L*bmpP) >> 16;
 	bmpP = bmpP + ((X1+X2+3791L)>>4);
-	int x = 21;
-	x+=1;
 }
 
