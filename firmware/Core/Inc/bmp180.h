@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stm32l4xx_hal.h"
+#include "i2c.h"
 
 typedef struct{
 	int16_t bmpAC1;

@@ -1,8 +1,6 @@
 #include "main.h"
 
 
-extern sensorReady;
-extern transmitterReady;
 
 void SystemClock_Config(void);
 void DMA_Init(void);
@@ -15,11 +13,7 @@ DMA_HandleTypeDef hdma_i2c1_tx;
 DMA_HandleTypeDef hdma_i2c1_rx;
 
 #define BUFFERSIZE 100
-#define MPU6050ADDR 0x69
 #define DS3231ADDR = 0b1101000
-
-
-uint8_t WHO_AM_I_MPU6050 = 0x75;
 
 
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c){
@@ -47,9 +41,10 @@ int main(void)
   I2C_Init();
 
   uint8_t result[1];
+  initMPU6050(0);
   while (1)
   {
-	  readRegister(MPU6050ADDR,WHO_AM_I_MPU6050, result, 1);
+	  getAccelMPU6050();
 	  int x = 21;
 	  x+=1;
   }

@@ -1,0 +1,2 @@
+../Core/Src/mpu6050.c:11:6:initMPU6050	24	static
+../Core/Src/mpu6050.c:33:6:getAccelMPU6050	24	static

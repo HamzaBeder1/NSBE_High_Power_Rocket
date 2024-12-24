@@ -1,9 +1,12 @@
 #include "i2c.h"
 
+bool sensorReady = 0;
+bool transmitterReady = 0;
+I2C_HandleTypeDef hI2C;
 
 void writeRegister(uint8_t addr, uint8_t regAddr, uint8_t value){
 	uint8_t data[2] = {regAddr, value};
-	HAL_I2C_Master_Transmit_DMA(&hI2C, addr & (0xFE), data, 2);
+	HAL_I2C_Master_Transmit_DMA(&hI2C, (addr << 1), data, 2);
 	while(!sensorReady);
 	sensorReady = 0;
 }

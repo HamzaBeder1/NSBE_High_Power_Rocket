@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -8,6 +10,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
 #include "bmp180.h"
+#include "mpu6050.h"
 
 void Error_Handler(void);
 
