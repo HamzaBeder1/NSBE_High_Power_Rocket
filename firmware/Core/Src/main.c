@@ -39,15 +39,15 @@ int main(void)
   SystemClock_Config();
   DMA_Init();
   I2C_Init();
-
-  uint8_t result[1];
+  uint8_t arr[] = {30, 0, 11, 28, 7, 12};
+  initDS3231(2024, arr, 1, 12);
   initMPU6050(0);
-  uint8_t arr[6] = {30, 14, 4, 3, 24, 12};
+  uint8_t timeData[6] = {30, 14, 4, 3, 24, 12};
+  char header[] = "Time,Acceleration";
   while (1)
   {
-	  initDS3231(2024, arr, 1, 12);
-	    getDateAndTime();
-	  //getAccelMPU6050();
+	  getDateAndTime();
+	  getAccelMPU6050(second);
 	  get_bmp_p();
 	  int x = 21;
 	  x+=1;
