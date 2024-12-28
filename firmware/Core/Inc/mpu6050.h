@@ -4,7 +4,7 @@
 #include "i2c.h"
 #include <stdbool.h>
 
-#define MPU6050ADDR 0x69
+#define MPU6050ADDR 0x68
 #define WHO_AM_I 0x75
 #define PWR_MGMT_1 0x6B
 #define PWR_MGMT_2 0x6C
@@ -57,7 +57,7 @@ enum accelRange{
 };
 
 void initMPU6050(unsigned char AFS_SEL);
-void getAccelMPU6050(uint8_t s);
+void getAccelMPU6050(int s);
 void getVelocityMPU6050();
 void getAltitudeMPU6050();
 

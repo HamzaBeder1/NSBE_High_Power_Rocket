@@ -28,12 +28,12 @@ void initMPU6050(unsigned char AFS_SEL){
 	default:
 		break;
 	}
-	writeRegister(MPU6050ADDR, PWR_MGMT_1, 0x00);
+	/*writeRegister(MPU6050ADDR, PWR_MGMT_1, 0x00);
 	uint8_t temp[1];
 	readRegister(MPU6050ADDR, ACCEL_CONFIG, temp, 1);
-	temp[1] &= 0b11100111;
-	temp[1] |= (AFS_SEL << 3);
-	writeRegister(MPU6050ADDR, ACCEL_CONFIG, temp[1]);
+	temp[0] &= 0b11100111;
+	temp[0] |= (AFS_SEL << 3);
+	writeRegister(MPU6050ADDR, ACCEL_CONFIG, temp);*/
 
 	total_buffer_size = 100;
 	accel_buffer_MPU6050 = (accelMPU6050*)malloc(sizeof(accelMPU6050)*total_buffer_size);
@@ -45,7 +45,7 @@ void initMPU6050(unsigned char AFS_SEL){
 	altitude_idx = 0;
 }
 
-void getAccelMPU6050(uint8_t s){
+void getAccelMPU6050(int s){
 	uint8_t accelReg[6];
 	readRegister(MPU6050ADDR,ACCEL_XOUT_H, accelReg, 6);
 
@@ -95,6 +95,5 @@ void getAltitudeMPU6050(){
 		altitude_buffer_MPU6050[i].altitudeZ = (velocity_buffer_MPU6050[i-1].velZ+velocity_buffer_MPU6050[i].velZ)*dt*(1/2);
 		altitude_buffer_MPU6050[i].seconds = velocity_buffer_MPU6050[i].seconds;
 	}
-
 
 }

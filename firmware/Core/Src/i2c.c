@@ -13,10 +13,10 @@ void writeRegister(uint8_t addr, uint8_t regAddr, uint8_t value){
 
 void readRegister(uint8_t addr, uint8_t regAddr, uint8_t *result, uint16_t size){
 	uint8_t data[1] = {regAddr};
-	HAL_I2C_Master_Transmit_DMA(&hI2C, (addr << 1), data, 1);
+	HAL_I2C_Master_Sequential_Transmit_DMA(&hI2C, (addr << 1), data, 1, I2C_FIRST_FRAME);
 	while(!sensorReady);
 	sensorReady = 0;
-	HAL_I2C_Master_Receive_DMA(&hI2C, (addr << 1) | (0x01), result, size);
+	HAL_I2C_Master_Sequential_Receive_DMA(&hI2C, (addr << 1) | (0x01), result, size, I2C_LAST_FRAME);
 	while(!transmitterReady);
 	transmitterReady = 0;
 }

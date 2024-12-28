@@ -13,7 +13,7 @@ DMA_HandleTypeDef hdma_i2c1_tx;
 DMA_HandleTypeDef hdma_i2c1_rx;
 
 #define BUFFERSIZE 100
-#define DS3231ADDR = 0b1101000
+#define DS3231ADDR 0b1101000
 
 
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c){
@@ -40,15 +40,16 @@ int main(void)
   DMA_Init();
   I2C_Init();
   uint8_t arr[] = {30, 0, 11, 28, 7, 12};
-  initDS3231(2024, arr, 1, 12);
+  //initDS3231(2024, arr, 1, 12);
+  //get_bmp_t();
   initMPU6050(0);
   uint8_t timeData[6] = {30, 14, 4, 3, 24, 12};
   char header[] = "Time,Acceleration";
   while (1)
   {
-	  getDateAndTime();
+	  //getDateAndTime();
 	  getAccelMPU6050(second);
-	  get_bmp_p();
+	  //getAltitudeBMP180(second);
 	  int x = 21;
 	  x+=1;
   }

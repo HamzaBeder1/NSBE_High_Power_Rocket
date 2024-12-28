@@ -20,15 +20,17 @@ void get_bmp_ut(){
 }
 
 void get_bmp_up(){
+	get_bmp_ut();
 	writeRegister(BMP180_ADDR, BMP180_CTRL_MEAS, 0x34);
+	HAL_Delay(5);
 	uint8_t data[3];
 	readRegister(BMP180_ADDR, BMP180_OUT_MSB, data, 3);
-	bmpUP = (((int32_t)(data[0]) << 16) | ((int32_t)(data[1]) << 8) | (int32_t)(data[2])) >> (8-OSS_BMP180);
+	bmpUP = (((int32_t)(data[0]) << 16) | ((int32_t)(data[1]) << 8) | (int32_t)(data[2])) >> (8);
 }
 
 void get_bmp_t(){
 	get_bmp_calibration_data();
-	get_bmp_ut();
+	get_bmp_up();
 	uint16_t AC6 = (calibration_data[10] << 8) | calibration_data[11];
 	uint16_t AC5 = (calibration_data[8] << 8) | calibration_data[9];
 	int16_t MC = (calibration_data[18] << 8) | calibration_data[19];
@@ -42,9 +44,7 @@ void get_bmp_t(){
 }
 
 void get_bmp_p(){
-	get_bmp_calibration_data();
-	get_bmp_ut();
-	get_bmp_up();
+	get_bmp_t();
 	int16_t AC1 = (calibration_data[0] << 8) | calibration_data[1];
 	int16_t AC2  = (calibration_data[2] << 8) | calibration_data[3];
 	int16_t AC3 = (calibration_data[4] << 8) | calibration_data[5];
@@ -81,5 +81,14 @@ void get_bmp_p(){
 	X1 = (X1*3038L) >> 16;
 	X2 = (-7357L*bmpP) >> 16;
 	bmpP = bmpP + ((X1+X2+3791L)>>4);
+}
+
+void getAltitudeBMP180(int s){
+	get_bmp_p();
+	altitudeBMP180 a;
+	float exp = -R*L/(g*M);
+	float temp = pow((float)bmpP/P0, exp);
+	a.altitude = (T0/L)*(temp-1);
+	a.seconds = s;
 }
 
