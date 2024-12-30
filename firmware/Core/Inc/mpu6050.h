@@ -15,6 +15,8 @@
 #define ACCEL_YOUT_L 0x3E
 #define ACCEL_ZOUT_H 0x3F
 #define ACCEL_ZOUT_L 0x40
+#define SIGNAL_PATH_RESET 0x68
+#define SMPRT_DIV 0x19
 
 typedef struct{
 	float accelX;

@@ -28,12 +28,25 @@ void initMPU6050(unsigned char AFS_SEL){
 	default:
 		break;
 	}
-	/*writeRegister(MPU6050ADDR, PWR_MGMT_1, 0x00);
+
+	writeRegister(MPU6050ADDR, PWR_MGMT_1, 0x80);
+	bool device_reset = 1;
+	while(device_reset){
+		uint8_t pwr_mgmt[1];
+		readRegister(MPU6050ADDR, PWR_MGMT_1, pwr_mgmt, 1);
+		device_reset = (pwr_mgmt[0] >> 7);
+	}
+	writeRegister(MPU6050ADDR, PWR_MGMT_1, 0x00);
+	uint8_t pwr_mgmt[1];
+	readRegister(MPU6050ADDR, PWR_MGMT_1, pwr_mgmt, 1);
+	writeRegister(MPU6050ADDR, SIGNAL_PATH_RESET, 0x07);
 	uint8_t temp[1];
 	readRegister(MPU6050ADDR, ACCEL_CONFIG, temp, 1);
 	temp[0] &= 0b11100111;
 	temp[0] |= (AFS_SEL << 3);
-	writeRegister(MPU6050ADDR, ACCEL_CONFIG, temp);*/
+	writeRegister(MPU6050ADDR, ACCEL_CONFIG, temp[0]);
+
+	//writeRegister(MPU6050ADDR, SMPRT_DIV, 0x00);
 
 	total_buffer_size = 100;
 	accel_buffer_MPU6050 = (accelMPU6050*)malloc(sizeof(accelMPU6050)*total_buffer_size);

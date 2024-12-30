@@ -1,4 +1,4 @@
-../Core/Src/mpu6050.c:17:6:initMPU6050	5
-../Core/Src/mpu6050.c:48:6:getAccelMPU6050	2
-../Core/Src/mpu6050.c:72:6:getVelocityMPU6050	2
-../Core/Src/mpu6050.c:86:6:getAltitudeMPU6050	2
+../Core/Src/mpu6050.c:17:6:initMPU6050	6
+../Core/Src/mpu6050.c:61:6:getAccelMPU6050	2
+../Core/Src/mpu6050.c:85:6:getVelocityMPU6050	2
+../Core/Src/mpu6050.c:99:6:getAltitudeMPU6050	2
