@@ -1,0 +1,2 @@
+../Core/Src/spi.c:3:6:SPI_Init	1
+../Core/Src/spi.c:7:13:MX_SPI1_Init	2

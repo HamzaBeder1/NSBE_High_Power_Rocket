@@ -1,0 +1,4 @@
+../Core/Src/sd.c:3:6:send_command	8
+../Core/Src/sd.c:31:6:initialize_SPI_mode	1
+../Core/Src/sd.c:39:6:read_block	5
+../Core/Src/sd.c:77:6:write_block	5

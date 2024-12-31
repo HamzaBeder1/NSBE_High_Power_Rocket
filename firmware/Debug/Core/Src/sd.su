@@ -1,0 +1,4 @@
+../Core/Src/sd.c:3:6:send_command	48	static
+../Core/Src/sd.c:31:6:initialize_SPI_mode	24	static
+../Core/Src/sd.c:39:6:read_block	568	static
+../Core/Src/sd.c:77:6:write_block	64	static

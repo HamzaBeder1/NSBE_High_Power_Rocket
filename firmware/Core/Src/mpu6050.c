@@ -45,8 +45,7 @@ void initMPU6050(unsigned char AFS_SEL){
 	temp[0] &= 0b11100111;
 	temp[0] |= (AFS_SEL << 3);
 	writeRegister(MPU6050ADDR, ACCEL_CONFIG, temp[0]);
-
-	//writeRegister(MPU6050ADDR, SMPRT_DIV, 0x00);
+	writeRegister(MPU6050ADDR, SMPRT_DIV, 0x00);
 
 	total_buffer_size = 100;
 	accel_buffer_MPU6050 = (accelMPU6050*)malloc(sizeof(accelMPU6050)*total_buffer_size);
