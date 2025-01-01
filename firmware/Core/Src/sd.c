@@ -118,3 +118,117 @@ bool write_block(uint32_t block, uint8_t* data){
 
 	return 1;
 }
+
+void initialize_SD_card(){
+	uint8_t cmd0[6] = {0x40, 0x00, 0x00, 0x00, 0x00, 0x95};
+		  uint8_t cmd8[6] = {0x48, 0x00, 0x00, 0x01, 0xAA, 0x87};
+		  uint8_t cmd55[6] = {0x77, 0x00, 0x00, 0x00, 0x00, 0xFF};
+		  uint8_t acdm41[6] = {0x69, 0x40,0x00, 0x00, 0x00, 0xFF};
+		  uint8_t cmd16[6] = {0x50, 0x00, 0x00, 0x02, 0x00, 0xFF};
+		  bool result = 0;
+
+		  initialize_SPI_mode();
+		  while(result == 0)
+			  result = send_command(cmd0, 0x01);
+		  result = 0;
+		  while(result == 0)
+			  result = send_command(cmd8, 0x01);
+		  result = 0;
+		  while(result == 0){
+			  bool temp = send_command(cmd55, 0x01);
+			  if(!temp)
+				  continue;
+			  result = send_command(acdm41, 0x00);
+		  }
+		  result = 0;
+		  while(result == 0){
+			  result = send_command(cmd16, 0x00);
+		  }
+		  result = 0;
+}
+
+
+
+bool write_multiple_blocks(uint32_t first_block, uint8_t* data, uint32_t num_blocks){
+	uint8_t cmd25[6];
+	cmd25[0] = 0x59;
+	cmd25[1] = (first_block >> 24)&0xFF;
+	cmd25[2] = (first_block >> 16)&0xFF;
+	cmd25[3] = (first_block >> 8) & 0xFF;
+	cmd25[4] = (first_block)&0xFF;
+	cmd25[5] = 0xFF;
+
+	bool result = send_command(cmd25, 0x00);
+	if(!result)
+		return 0;
+
+	uint8_t response[2];
+	for(int i = 0; i < num_blocks; i++){
+		send_bytes_SPI((uint8_t[]){0xFC}, 1);
+		send_bytes_SPI((data+i*512), 512);
+		send_bytes_SPI((uint8_t[]){0xFF, 0xFF}, 2);
+		send_receive_bytes_SPI((uint8_t[]){0xFF}, response, 1);
+		if((uint8_t)(response[0]&0x1F) != 0x05)
+			return 0;
+		while(1){
+			send_receive_bytes_SPI((uint8_t[]){0xFF}, response, 1);
+			if(response[0] != 0x00)
+				break;
+		}
+	}
+
+	send_bytes_SPI((uint8_t[]){0xFD}, 1);
+	while(1){
+			send_receive_bytes_SPI((uint8_t[]){0xFF}, response, 1);
+			if(response[0] != 0x00)
+				break;
+	}
+
+	for(int i = 0; i < 100; i++)
+		send_bytes_SPI((uint8_t[]){0xFF}, 1);
+	return 1;
+}
+
+bool read_multiple_blocks(uint32_t first_block, uint8_t* data, uint32_t num_blocks){
+	uint8_t cmd18[6];
+	uint8_t cmd12[] = {0x4C, 0x00, 0x00, 0x00, 0x00, 0xFF};
+	cmd18[0] = 0x52;
+	cmd18[1] = (first_block >> 24)&0xFF;
+	cmd18[2] = (first_block >> 16)&0xFF;
+	cmd18[3] = (first_block >> 8) & 0xFF;
+	cmd18[4] = (first_block)&0xFF;
+	cmd18[5] = 0xFF;
+	bool result = 0;
+	result = send_command(cmd18, 0x00);
+	if(!result)
+		return 0;
+
+	uint8_t response[2];
+	for(int i = 0; i < num_blocks; i++){
+		for(int i = 0; i < 1000; i++){
+			send_receive_bytes_SPI((uint8_t[]){0xFF}, response, 1);
+			if(response[0] == 0xFE)
+				break;
+		}
+		if(response[0] != 0xFE)
+			return 0;
+
+		uint8_t send[512] = {0};
+		memset(send, 0xFF,512);
+		send_receive_bytes_SPI(send, data+i*512,512);
+
+		send_receive_bytes_SPI((uint8_t[]){0xFF, 0xFF}, response, 2);
+	}
+	result = send_command(cmd12, 0x00);
+	if(!result)
+		return 0;
+
+	while(1){
+		send_receive_bytes_SPI((uint8_t[]){0xFF}, response, 1);
+		if(response[0] != 0x00)
+			break;
+	}
+
+	return 1;
+}
+

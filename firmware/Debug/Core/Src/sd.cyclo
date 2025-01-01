@@ -2,3 +2,6 @@
 ../Core/Src/sd.c:31:6:initialize_SPI_mode	1
 ../Core/Src/sd.c:39:6:read_block	5
 ../Core/Src/sd.c:77:6:write_block	5
+../Core/Src/sd.c:122:6:initialize_SD_card	6
+../Core/Src/sd.c:152:6:write_multiple_blocks	7
+../Core/Src/sd.c:192:6:read_multiple_blocks	8
