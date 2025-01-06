@@ -1,5 +1,7 @@
 #include "sd.h"
 
+static bool is_initialized = 0;
+
 bool send_command(uint8_t* cmd, uint8_t response){
 	bool success = 0;
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
@@ -34,7 +36,6 @@ void initialize_SPI_mode(){
 	memset(dummy, 0xFF, sizeof(dummy));
 	HAL_SPI_Transmit(&hspi1, dummy, sizeof(dummy), HAL_MAX_DELAY);
 }
-
 
 bool read_block(uint32_t block, uint8_t* data){
 	uint8_t cmd17[6];
@@ -145,9 +146,12 @@ void initialize_SD_card(){
 			  result = send_command(cmd16, 0x00);
 		  }
 		  result = 0;
+		  is_initialized = 1;
 }
 
-
+bool is_SD_card_initialized(){
+	return is_initialized;
+}
 
 bool write_multiple_blocks(uint32_t first_block, uint8_t* data, uint32_t num_blocks){
 	uint8_t cmd25[6];

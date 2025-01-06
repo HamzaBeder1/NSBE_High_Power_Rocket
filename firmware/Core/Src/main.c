@@ -1,7 +1,6 @@
 #include "main.h"
 
 
-
 void SystemClock_Config(void);
 void DMA_Init(void);
 void I2C_Init(void);
@@ -11,6 +10,10 @@ static void MX_USART2_UART_Init(void);
 
 DMA_HandleTypeDef hdma_i2c1_tx;
 DMA_HandleTypeDef hdma_i2c1_rx;
+
+FATFS fs;
+FIL file;
+FRESULT res;
 
 #define BUFFERSIZE 100
 #define DS3231ADDR 0b1101000
@@ -45,6 +48,41 @@ int main(void)
   initMPU6050(0);
   uint8_t timeData[6] = {30, 14, 4, 3, 24, 12};
   char header[] = "Time,Acceleration";
+
+  //res = f_mount(&fs, "", 1);
+  if(res != FR_OK)
+	  while(1);
+
+  res = f_open(&file, "text.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  if(res == FR_OK){
+	  const char* text = "Hello, SD card!\n";
+	  UINT bytesWritten;
+
+	  res = f_write(&file, text, strlen(text), &bytesWritten);
+	  if(res != FR_OK)
+		  while(1);
+	  f_close(&file);
+  }
+
+  else
+	  while(1);
+
+  res = f_open(&file, "text.txt", FA_READ);
+  if(res == FR_OK){
+	  char buffer[64];
+	  UINT bytesRead;
+
+	  res = f_read(&file, buffer, sizeof(buffer) - 1, &bytesRead);
+	  if(res != FR_OK)
+		  while(1);
+	  buffer[bytesRead] = '\0';
+
+	  f_close(&file);
+  }
+
+  else
+	  while(1);
+
   while (1)
   {
 	  //getDateAndTime();

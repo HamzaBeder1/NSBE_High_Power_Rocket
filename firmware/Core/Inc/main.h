@@ -12,6 +12,7 @@ extern "C" {
 #include "bmp180.h"
 #include "mpu6050.h"
 #include "ds3231.h"
+#include "ff.h"
 
 void Error_Handler(void);
 

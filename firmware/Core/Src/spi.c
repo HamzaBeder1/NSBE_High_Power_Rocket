@@ -1,5 +1,6 @@
 #include "spi.h"
 
+//PA5 = SCK, PA6 = MISO, PA7 = MOSI, PA9 = CS
 void SPI_Init(){
 	hspi1.Instance = SPI1;
 	  hspi1.Init.Mode = SPI_MODE_MASTER;
