@@ -1,25 +1,43 @@
 /*-----------------------------------------------------------------------*/
-/* Low level disk I/O module SKELETON for FatFs     (C)ChaN, 2019        */
+/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2017        */
+/*                                                                       */
+/*   Portions COPYRIGHT 2017 STMicroelectronics                          */
+/*   Portions Copyright (C) 2017, ChaN, all right reserved               */
 /*-----------------------------------------------------------------------*/
 /* If a working storage control module is available, it should be        */
 /* attached to the FatFs via a glue function rather than modifying it.   */
-/* This is an example of glue functions to attach various exsisting      */
+/* This is an example of glue functions to attach various existing      */
 /* storage control modules to the FatFs module with a defined API.       */
 /*-----------------------------------------------------------------------*/
 
-#include "ff.h"			/* Obtains integer types */
-#include "diskio.h"		/* Declarations of disk functions */
+/* Includes ------------------------------------------------------------------*/
+#include "diskio.h"
+#include "ff_gen_drv.h"
 
-/* Definitions of physical drive number for each drive */
+#if defined ( __GNUC__ )
+#ifndef __weak
+#define __weak __attribute__((weak))
+#endif
+#endif
+
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+extern Disk_drvTypeDef  disk;
+
 #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
 #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
 #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
 
-/*-----------------------------------------------------------------------*/
-/* Get Drive Status                                                      */
-/*-----------------------------------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
+/**
+  * @brief  Gets Disk Status
+  * @param  pdrv: Physical drive number (0..)
+  * @retval DSTATUS: Operation status
+  */
 DSTATUS disk_status (
 	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
@@ -35,12 +53,11 @@ DSTATUS disk_status (
 	}
 }
 
-
-
-/*-----------------------------------------------------------------------*/
-/* Inidialize a Drive                                                    */
-/*-----------------------------------------------------------------------*/
-
+/**
+  * @brief  Initializes a Drive
+  * @param  pdrv: Physical drive number (0..)
+  * @retval DSTATUS: Operation status
+  */
 DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
 )
@@ -57,20 +74,22 @@ DSTATUS disk_initialize (
 	return stat;
 }
 
-
-
-/*-----------------------------------------------------------------------*/
-/* Read Sector(s)                                                        */
-/*-----------------------------------------------------------------------*/
-
+/**
+  * @brief  Reads Sector(s)
+  * @param  pdrv: Physical drive number (0..)
+  * @param  *buff: Data buffer to store read data
+  * @param  sector: Sector address (LBA)
+  * @param  count: Number of sectors to read (1..128)
+  * @retval DRESULT: Operation result
+  */
 DRESULT disk_read (
 	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
 	BYTE *buff,		/* Data buffer to store read data */
-	LBA_t sector,	/* Start sector in LBA */
+	DWORD sector,	        /* Sector address in LBA */
 	UINT count		/* Number of sectors to read */
 )
 {
-	switch(pdrv){
+  switch(pdrv){
 	case DEV_MMC:
 		if(!is_SD_card_initialized())
 			return RES_NOTRDY;
@@ -84,19 +103,20 @@ DRESULT disk_read (
 	}
 }
 
-
-
-/*-----------------------------------------------------------------------*/
-/* Write Sector(s)                                                       */
-/*-----------------------------------------------------------------------*/
-
-#if FF_FS_READONLY == 0
-
+/**
+  * @brief  Writes Sector(s)
+  * @param  pdrv: Physical drive number (0..)
+  * @param  *buff: Data to be written
+  * @param  sector: Sector address (LBA)
+  * @param  count: Number of sectors to write (1..128)
+  * @retval DRESULT: Operation result
+  */
+#if _USE_WRITE == 1
 DRESULT disk_write (
-	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
+	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
 	const BYTE *buff,	/* Data to be written */
-	LBA_t sector,		/* Start sector in LBA */
-	UINT count			/* Number of sectors to write */
+	DWORD sector,		/* Sector address in LBA */
+	UINT count        	/* Number of sectors to write */
 )
 {
 	switch(pdrv){
@@ -112,43 +132,38 @@ DRESULT disk_write (
 		return RES_PARERR;
 	}
 }
+#endif /* _USE_WRITE == 1 */
 
-#endif
-
-
-/*-----------------------------------------------------------------------*/
-/* Miscellaneous Functions                                               */
-/*-----------------------------------------------------------------------*/
-
+/**
+  * @brief  I/O control operation
+  * @param  pdrv: Physical drive number (0..)
+  * @param  cmd: Control code
+  * @param  *buff: Buffer to send/receive control data
+  * @retval DRESULT: Operation result
+  */
+#if _USE_IOCTL == 1
 DRESULT disk_ioctl (
 	BYTE pdrv,		/* Physical drive nmuber (0..) */
 	BYTE cmd,		/* Control code */
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res;
-	int result;
+  DRESULT res;
 
-	switch (pdrv) {
-	case DEV_RAM :
-
-		// Process of the command for the RAM drive
-
-		return res;
-
-	case DEV_MMC :
-
-		// Process of the command for the MMC/SD card
-
-		return res;
-
-	case DEV_USB :
-
-		// Process of the command the USB drive
-
-		return res;
-	}
-
-	return RES_PARERR;
+  res = disk.drv[pdrv]->disk_ioctl(disk.lun[pdrv], cmd, buff);
+  return res;
 }
+#endif /* _USE_IOCTL == 1 */
+
+/**
+  * @brief  Gets Time from RTC
+  * @param  None
+  * @retval Time in DWORD
+  */
+__weak DWORD get_fattime (void)
+{
+  return 0;
+}
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

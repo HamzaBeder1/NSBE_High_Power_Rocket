@@ -1,5 +1,6 @@
 #include "sd.h"
 
+
 static bool is_initialized = 0;
 
 bool send_command(uint8_t* cmd, uint8_t response){
@@ -120,7 +121,7 @@ bool write_block(uint32_t block, uint8_t* data){
 	return 1;
 }
 
-void initialize_SD_card(){
+bool initialize_SD_card(){
 	uint8_t cmd0[6] = {0x40, 0x00, 0x00, 0x00, 0x00, 0x95};
 		  uint8_t cmd8[6] = {0x48, 0x00, 0x00, 0x01, 0xAA, 0x87};
 		  uint8_t cmd55[6] = {0x77, 0x00, 0x00, 0x00, 0x00, 0xFF};
@@ -147,6 +148,7 @@ void initialize_SD_card(){
 		  }
 		  result = 0;
 		  is_initialized = 1;
+		  return 1;
 }
 
 bool is_SD_card_initialized(){

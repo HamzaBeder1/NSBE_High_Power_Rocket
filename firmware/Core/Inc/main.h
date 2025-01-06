@@ -13,6 +13,7 @@ extern "C" {
 #include "mpu6050.h"
 #include "ds3231.h"
 #include "ff.h"
+#include "sd.h"
 
 void Error_Handler(void);
 

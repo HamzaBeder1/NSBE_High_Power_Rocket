@@ -1,6 +1,8 @@
-Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o: \
- ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
+Middlewares/Third_Party/FatFs/src/ff.o: \
+ ../Middlewares/Third_Party/FatFs/src/ff.c \
+ ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
+ ../Core/Inc/main.h ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h \
@@ -27,7 +29,15 @@ Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o: \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h \
+ ../Core/Inc/bmp180.h ../Core/Inc/i2c.h ../Core/Inc/mpu6050.h \
+ ../Core/Inc/ds3231.h ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Core/Inc/sd.h ../Core/Inc/spi.h \
+ ../Middlewares/Third_Party/FatFs/src/diskio.h
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Middlewares/Third_Party/FatFs/src/integer.h:
+../FATFS/Target/ffconf.h:
+../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h:
@@ -56,3 +66,11 @@ Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.o: \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h:
+../Core/Inc/bmp180.h:
+../Core/Inc/i2c.h:
+../Core/Inc/mpu6050.h:
+../Core/Inc/ds3231.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Core/Inc/sd.h:
+../Core/Inc/spi.h:
+../Middlewares/Third_Party/FatFs/src/diskio.h:

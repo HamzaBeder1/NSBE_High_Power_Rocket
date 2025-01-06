@@ -1,3 +1,3 @@
-../Core/Src/spi.c:4:6:SPI_Init	8	static
-../Core/Src/spi.c:25:6:send_bytes_SPI	16	static
-../Core/Src/spi.c:31:6:send_receive_bytes_SPI	32	static
+../Core/Src/spi.c:5:6:SPI_Init	8	static
+../Core/Src/spi.c:33:6:send_bytes_SPI	16	static
+../Core/Src/spi.c:39:6:send_receive_bytes_SPI	32	static
