@@ -44,7 +44,7 @@ int main(void)
  result = is_SD_card_initialized();
  if(!result)
 	  while(1);
- res = f_mount(&fs, "", 1);
+ res = f_mount(&fs, "0:", 1);
  if(res != FR_OK)
 	  while(1);
  res = f_open(&file, "text.txt", FA_CREATE_ALWAYS | FA_WRITE);
@@ -70,10 +70,13 @@ int main(void)
  }
  else
 	  while(1);
+
+ int x = 21;
+ x+=1;
  while (1)
  {
 	  //getDateAndTime();
-	  getAccelMPU6050(second);
+	 // getAccelMPU6050(second);
 	  //getAltitudeBMP180(second);
 	  int x = 21;
 	  x+=1;

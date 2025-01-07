@@ -1,4 +1,4 @@
-#include "spi.h"
+ #include "spi.h"
 
 SPI_HandleTypeDef hspi1;
 //PA5 = SCK, PA6 = MISO, PA7 = MOSI, PA9 = CS
