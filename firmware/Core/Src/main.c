@@ -35,57 +35,12 @@ int main(void)
  HAL_Init();
  SystemClock_Config();
  GPIO_Init();
- //DMA_Init();
- //I2C_Init();
- SPI_Init();
- uint8_t arr[] = {30, 0, 11, 28, 7, 12};
- //initDS3231(2024, arr, 1, 12);
- //get_bmp_t();
- //initMPU6050(0);
- uint8_t timeData[6] = {30, 14, 4, 3, 24, 12};
- char header[] = "Time,Acceleration";
- bool result = initialize_SD_card();
- if(!result)
-	  while(1);
- result = is_SD_card_initialized();
- if(!result)
-	  while(1);
- res = f_mount(&fs, "0:", 1);
- if(res != FR_OK)
-	  while(1);
- res = f_open(&file, "text.txt", FA_CREATE_ALWAYS | FA_WRITE);
- if(res == FR_OK){
-	  const char* text = "Hello, SD card!\n";
-	  UINT bytesWritten;
-	  res = f_write(&file, text, strlen(text), &bytesWritten);
-	  if(res != FR_OK)
-		  while(1);
-	  f_close(&file);
- }
- else
-	  while(1);
- res = f_open(&file, "text.txt", FA_READ);
- if(res == FR_OK){
-	  char buffer[64];
-	  UINT bytesRead;
-	  res = f_read(&file, buffer, sizeof(buffer) - 1, &bytesRead);
-	  if(res != FR_OK)
-		  while(1);
-	  buffer[bytesRead] = '\0';
-	  f_close(&file);
- }
- else
-	  while(1);
+ UART_Init();
 
- int x = 21;
- x+=1;
  while (1)
  {
-	  //getDateAndTime();
-	 // getAccelMPU6050(second);
-	  //getAltitudeBMP180(second);
-	  int x = 21;
-	  x+=1;
+	 NEOM9N_Init();
+	 NEOM9N_get_PVT();
  }
 }
 void SystemClock_Config(void)

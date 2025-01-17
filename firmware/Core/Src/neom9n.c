@@ -3,6 +3,7 @@
 UART_HandleTypeDef huart3;
 uint8_t buffer[100];
 uint8_t buffer_idx;
+NEOM9N_DATA_struct NEOM9N_data;
 
 void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size);
 void UART_Init();
@@ -24,6 +25,7 @@ void UART_Init(){
 }
 
 void NEOM9N_Init(){
+  HAL_UART_Receive_IT(&huart3, &buffer[buffer_idx], 1);
   buffer_idx = 0;
   uint8_t c1;
   uint8_t c2;
@@ -59,6 +61,12 @@ void NEOM9N_Init(){
   HAL_UART_Transmit(&huart3, arr4, sizeof(arr4), HAL_MAX_DELAY);
   HAL_Delay(100);
   buffer_idx=0;
+  HAL_UART_Transmit(&huart3, pvt_cmd, sizeof(pvt_cmd), HAL_MAX_DELAY);
+  	HAL_Delay(100);
+  	buffer_idx = 0;
+  	uint8_t temp5[92];
+  	memcpy(temp5,buffer+6,92);
+  	NEOM9N_data.year = (temp5[5]<< 8)|(temp5[4]);
 }
 
 void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size){
@@ -70,3 +78,8 @@ void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size)
 		*ck2 = *ck2 + *ck1;
 	}
 }
+
+void NEOM9N_get_PVT(){
+
+}
+
