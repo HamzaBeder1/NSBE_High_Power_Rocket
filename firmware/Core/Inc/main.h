@@ -14,6 +14,7 @@ extern "C" {
 #include "ds3231.h"
 #include "ff.h"
 #include "sd.h"
+#include "neom9n.h"
 
 void Error_Handler(void);
 

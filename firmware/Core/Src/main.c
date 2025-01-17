@@ -24,6 +24,12 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef * I2CHandle){
 		transmitterReady = 1;
 	}
 }
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	buffer_idx++;
+	HAL_UART_Receive_IT(&huart3, &buffer[buffer_idx], 1);
+}
 int main(void)
 {
  HAL_Init();
