@@ -482,8 +482,8 @@
       "plot": "../../../../Rocket_Output_FIles/",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
-      "svg": "",
+      "step": "Rocket.step",
+      "svg": "../../../../../../Downloads/",
       "vrml": ""
     },
     "page_layout_descr_file": ""
