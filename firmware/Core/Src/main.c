@@ -36,12 +36,46 @@ int main(void)
  SystemClock_Config();
  GPIO_Init();
  UART_Init();
+ I2C_Init();
+ SPI_Init();
 
- while (1)
- {
-	 NEOM9N_Init();
-	 NEOM9N_get_PVT();
+ bool result = initialize_SD_card();
+ if(!result)
+	  while(1);
+ result = is_SD_card_initialized();
+ if(!result)
+	  while(1);
+ res = f_mount(&fs, "", 1);
+ if(res != FR_OK)
+	  while(1);
+ res = f_open(&file, "text.txt", FA_CREATE_ALWAYS | FA_WRITE);
+ if(res == FR_OK){
+	  const char* text = "Hello, SD card!\n";
+	  UINT bytesWritten;
+	  res = f_write(&file, text, strlen(text), &bytesWritten);
+	  if(res != FR_OK)
+		  while(1);
+	  f_close(&file);
  }
+ else
+	  while(1);
+ res = f_open(&file, "text.txt", FA_READ);
+ if(res == FR_OK){
+	  char buffer[64];
+	  UINT bytesRead;
+	  res = f_read(&file, buffer, sizeof(buffer) - 1, &bytesRead);
+	  if(res != FR_OK)
+		  while(1);
+	  buffer[bytesRead] = '\0';
+	  f_close(&file);
+ }
+ else
+	  while(1);
+
+ while(1){
+
+ }
+
 }
 void SystemClock_Config(void)
 {

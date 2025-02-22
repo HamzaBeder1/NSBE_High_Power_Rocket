@@ -2,6 +2,7 @@
 #include "stm32l4xx_hal.h"
 #include "spi.h"
 #include "stdbool.h"
+#include "ff.h"
 
 static bool is_initialized;
 

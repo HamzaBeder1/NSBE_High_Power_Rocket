@@ -31,7 +31,10 @@ Core/Src/sd.o: ../Core/Src/sd.c ../Core/Inc/sd.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart_ex.h \
- ../Core/Inc/spi.h
+ ../Core/Inc/spi.h ../Middlewares/Third_Party/FatFs/src/ff.h \
+ ../Middlewares/Third_Party/FatFs/src/integer.h ../FATFS/Target/ffconf.h \
+ ../Core/Inc/main.h ../Core/Inc/bmp180.h ../Core/Inc/i2c.h \
+ ../Core/Inc/mpu6050.h ../Core/Inc/ds3231.h ../Core/Inc/neom9n.h
 ../Core/Inc/sd.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -66,3 +69,12 @@ Core/Src/sd.o: ../Core/Src/sd.c ../Core/Inc/sd.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart_ex.h:
 ../Core/Inc/spi.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
+../Middlewares/Third_Party/FatFs/src/integer.h:
+../FATFS/Target/ffconf.h:
+../Core/Inc/main.h:
+../Core/Inc/bmp180.h:
+../Core/Inc/i2c.h:
+../Core/Inc/mpu6050.h:
+../Core/Inc/ds3231.h:
+../Core/Inc/neom9n.h:

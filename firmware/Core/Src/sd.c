@@ -238,3 +238,33 @@ bool read_multiple_blocks(uint32_t first_block, uint8_t* data, uint32_t num_bloc
 	return 1;
 }
 
+void write_to_file(char*data, FIL file, FATFS fs,FRESULT res, TCHAR path){
+	 res = f_mount(&fs, "0:", 1);
+	 if(res != FR_OK)
+		  while(1);
+	 res = f_open(&file, path, FA_CREATE_ALWAYS | FA_WRITE);
+	 if(res == FR_OK){
+		  UINT bytesWritten;
+		  res = f_write(&file, data, strlen(data), &bytesWritten);
+		  if(res != FR_OK)
+			  while(1);
+		  f_close(&file);
+	 }
+	 else
+		  while(1);
+}
+
+void read_to_file(char*data, FIL file, FATFS fs,FRESULT res, TCHAR path){
+	res = f_open(&file, "text.txt", FA_READ);
+		 if(res == FR_OK){
+			  UINT bytesRead;
+			  res = f_read(&file, data, sizeof(data) - 1, &bytesRead);
+			  if(res != FR_OK)
+				  while(1);
+			  data[bytesRead] = '\0';
+			  f_close(&file);
+		 }
+		 else
+			  while(1);
+}
+

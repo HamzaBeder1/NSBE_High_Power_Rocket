@@ -12,7 +12,6 @@ extern "C" {
 #include "bmp180.h"
 #include "mpu6050.h"
 #include "ds3231.h"
-#include "ff.h"
 #include "sd.h"
 #include "neom9n.h"
 

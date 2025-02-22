@@ -5,6 +5,8 @@ uint8_t buffer[100];
 uint8_t buffer_idx;
 NEOM9N_DATA_struct NEOM9N_data;
 
+
+//TX = 11, RX = 10
 void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size);
 void UART_Init();
 void UART_Init(){
@@ -61,12 +63,6 @@ void NEOM9N_Init(){
   HAL_UART_Transmit(&huart3, arr4, sizeof(arr4), HAL_MAX_DELAY);
   HAL_Delay(100);
   buffer_idx=0;
-  HAL_UART_Transmit(&huart3, pvt_cmd, sizeof(pvt_cmd), HAL_MAX_DELAY);
-  	HAL_Delay(100);
-  	buffer_idx = 0;
-  	uint8_t temp5[92];
-  	memcpy(temp5,buffer+6,92);
-  	NEOM9N_data.year = (temp5[5]<< 8)|(temp5[4]);
 }
 
 void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size){
@@ -80,6 +76,24 @@ void calculate_checksum(uint8_t *ck1, uint8_t *ck2, uint8_t* buff, uint8_t size)
 }
 
 void NEOM9N_get_PVT(){
-
+	HAL_UART_Transmit(&huart3, pvt_cmd, sizeof(pvt_cmd), HAL_MAX_DELAY);
+	HAL_Delay(1000);
+	buffer_idx = 0;
+	uint8_t temp[92];
+	memcpy(temp,buffer+6,92);
+	NEOM9N_data.year = (temp[5]<< 8)|(temp[4]);
+	NEOM9N_data.month = temp[6];
+	NEOM9N_data.day = temp[7];
+	NEOM9N_data.hour = temp[8];
+	NEOM9N_data.min = temp[9];
+	NEOM9N_data.sec = temp[10];
+	NEOM9N_data.lon = ((temp[27] << 24) | (temp[26] << 16) | (temp[25] << 8) | temp[24])*pow(10,-7);
+	NEOM9N_data.lat = ((temp[31] << 24) | (temp[30] << 16) | (temp[29] << 8) | (temp[28]))*pow(10,-7);
+	NEOM9N_data.height = ((temp[35] << 24) | (temp[34] << 16) | (temp[33] << 8) | (temp[32]));
+	NEOM9N_data.hMSL = ((temp[39] << 24) | (temp[38] << 16) | (temp[37] << 8) | (temp[36]));
+	NEOM9N_data.velN = ((temp[51] << 24) | (temp[50] << 16) | (temp[49] << 8) | (temp[48]));
+	NEOM9N_data.velE = ((temp[55] << 24) | (temp[54] << 16) | (temp[53] << 8) | (temp[52]));
+	NEOM9N_data.velD = ((temp[59] << 24) | (temp[58] << 16) | (temp[57] << 8) | (temp[56]));
+	NEOM9N_data.gspeed = ((temp[63] << 24) | (temp[62] << 16) | (temp[61] << 8) | (temp[60]));
 }
 

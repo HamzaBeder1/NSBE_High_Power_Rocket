@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stm32l4xx_hal.h"
+#include "math.h"
 
 #define PREAMBLE_1 0xB5
 #define PREAMBLE_2 0x62
@@ -22,13 +23,14 @@ typedef struct{
 	uint8_t hour;
 	uint8_t min;
 	uint8_t sec;
-	uint32_t lon;
-	uint32_t lat;
-	uint32_t height;
-	uint32_t velocity_north;
-	uint32_t velocity_east;
-	uint32_t velocity_down;
-	uint32_t gspeed;
+	int32_t lon;
+	int32_t lat;
+	int32_t height;
+	int32_t hMSL;
+	int32_t velN;
+	int32_t velE;
+	int32_t velD;
+	int32_t gspeed;
 }NEOM9N_DATA_struct;
 
 extern NEOM9N_DATA_struct NEOM9N_data;

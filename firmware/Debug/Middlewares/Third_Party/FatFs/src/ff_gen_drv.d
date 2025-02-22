@@ -38,7 +38,7 @@ Middlewares/Third_Party/FatFs/src/ff_gen_drv.o: \
  ../Core/Inc/spi.h ../Middlewares/Third_Party/FatFs/src/ff.h \
  ../FATFS/Target/ffconf.h ../Core/Inc/main.h ../Core/Inc/bmp180.h \
  ../Core/Inc/i2c.h ../Core/Inc/mpu6050.h ../Core/Inc/ds3231.h \
- ../Middlewares/Third_Party/FatFs/src/ff.h ../Core/Inc/neom9n.h
+ ../Core/Inc/neom9n.h ../Middlewares/Third_Party/FatFs/src/ff.h
 ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h:
 ../Middlewares/Third_Party/FatFs/src/diskio.h:
 ../Middlewares/Third_Party/FatFs/src/integer.h:
@@ -83,5 +83,5 @@ Middlewares/Third_Party/FatFs/src/ff_gen_drv.o: \
 ../Core/Inc/i2c.h:
 ../Core/Inc/mpu6050.h:
 ../Core/Inc/ds3231.h:
-../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Core/Inc/neom9n.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:

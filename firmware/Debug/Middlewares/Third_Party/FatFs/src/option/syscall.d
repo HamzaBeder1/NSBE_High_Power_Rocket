@@ -36,8 +36,8 @@ Middlewares/Third_Party/FatFs/src/option/syscall.o: \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_usart_ex.h \
  ../Core/Inc/bmp180.h ../Core/Inc/i2c.h ../Core/Inc/mpu6050.h \
- ../Core/Inc/ds3231.h ../Middlewares/Third_Party/FatFs/src/ff.h \
- ../Core/Inc/sd.h ../Core/Inc/spi.h ../Core/Inc/neom9n.h
+ ../Core/Inc/ds3231.h ../Core/Inc/sd.h ../Core/Inc/spi.h \
+ ../Middlewares/Third_Party/FatFs/src/ff.h ../Core/Inc/neom9n.h
 ../Middlewares/Third_Party/FatFs/src/option/../ff.h:
 ../Middlewares/Third_Party/FatFs/src/option/../integer.h:
 ../FATFS/Target/ffconf.h:
@@ -78,7 +78,7 @@ Middlewares/Third_Party/FatFs/src/option/syscall.o: \
 ../Core/Inc/i2c.h:
 ../Core/Inc/mpu6050.h:
 ../Core/Inc/ds3231.h:
-../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Core/Inc/sd.h:
 ../Core/Inc/spi.h:
+../Middlewares/Third_Party/FatFs/src/ff.h:
 ../Core/Inc/neom9n.h:

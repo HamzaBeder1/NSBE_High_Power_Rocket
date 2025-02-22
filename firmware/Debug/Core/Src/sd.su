@@ -6,3 +6,5 @@
 ../Core/Src/sd.c:154:6:is_SD_card_initialized	4	static
 ../Core/Src/sd.c:158:6:write_multiple_blocks	72	static
 ../Core/Src/sd.c:198:6:read_multiple_blocks	576	static
+../Core/Src/sd.c:241:6:write_to_file	24	static
+../Core/Src/sd.c:257:6:read_to_file	24	static
