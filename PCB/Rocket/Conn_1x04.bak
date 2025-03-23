@@ -388,7 +388,7 @@
 		)
 		(symbol "Conn_1x08_1_1"
 			(pin passive line
-				(at 3.81 19.05 0)
+				(at 6.35 19.05 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -406,7 +406,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 16.51 0)
+				(at 6.35 16.51 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -424,7 +424,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 13.97 0)
+				(at 6.35 13.97 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -442,7 +442,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 11.43 0)
+				(at 6.35 11.43 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -460,7 +460,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 8.89 0)
+				(at 6.35 8.89 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -478,7 +478,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 6.35 0)
+				(at 6.35 6.35 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -496,7 +496,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 3.81 0)
+				(at 6.35 3.81 180)
 				(length 2.54)
 				(name ""
 					(effects
@@ -514,7 +514,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.81 1.27 0)
+				(at 6.35 1.27 180)
 				(length 2.54)
 				(name ""
 					(effects
